@@ -10,9 +10,18 @@ Docker images were built by first creating a Dockerfile for each service and the
 All services and client images are built from node. Clients are built by implimenting the npm run serve endpoint, and services with  node src/app/js. The primary function of these images is to allow easier access and faster deployment of the services.
 
 ## 2.2 Docker-compose
-A docker-compose file was created to join-up the services and expose the gateway to the internet. This file can be seen in `https://github.com/Assad-Zahieer/login-deployment/blob/master/docker-compose.yaml`
+A docker-compose file was created to join-up the services and expose the gateway to the internet. This file can be seen in https://github.com/Assad-Zahieer/login-deployment/blob/master/docker-compose.yaml
 It should be noted that the structure of this file corresponds to the Architecture (figure 1.0). Each numbered service on the diagram depends upon service with numbers greater than it. Therefore by deploying the services backwards (from 6) and ensuring that each corresponding number depends on the previous (e.g. 5 depends on 6, 4 on 5 etc.) We can ensure that all services are started up in the correct order. 
-Once all services were deployed, they were tested by going to the IP address of the VM, creating a user, verifying it, and loging in. The images were then pushed to docker hub: `docker-compose push` this works because the container names (in the yaml) are in the following format docker-hub-username/repository-name.
+Once all services were deployed, they were tested by going to the IP address of the VM, creating a user, verifying it, and loging in. The images were then pushed to docker hub: 
+`docker-compose push` 
+this works because the container names (in the yaml) are in the following format docker-hub-username/repository-name.
 
 ## 2.3 Kuberneties
+Deployment and service yaml files were created so that services could be deployed and exposed (via the gateway). All services (excluding the gateway) were exposed within the cluster only, to allow them to interact with each other, but prevent direct access from the internet. 
+To get everything up and running the following command was used:
+`kubectl apply -f .`
+This will delpoy all yaml fil within the working directory.
+To stop the services:
+`kubectl delete -f .`
+
 
