@@ -20,8 +20,10 @@ this works because the container names (in the yaml) are in the following format
 Deployment and service yaml files were created so that services could be deployed and exposed (via the gateway). All services (excluding the gateway) were exposed within the cluster only, to allow them to interact with each other, but prevent direct access from the internet. 
 To get everything up and running the following command was used:
 `kubectl apply -f .`
-This will delpoy all yaml fil within the working directory.
+This will delpoy all yaml files within the working directory.
 To stop the services:
 `kubectl delete -f .`
 
+## 3. Jenkins
+In order to automate the deployment of services when changes are made to the source code jenkins was implimented. Webhooks were used ot ensure that changes on github would automatically trigger a jenkins build. The build jobs consisted of first pulling the altered services from github, using docker and docker-compose to build updated images, and pushing these images to docker hub. Images were then updated, what follows is a template of how this was done `kubectl --record deployment.apps/authentication-client set image deployment.v1.apps/authentication-client authentication-client=docker.io/wrusselly/authentication-client:${BUILD_NUMBER}`
 
