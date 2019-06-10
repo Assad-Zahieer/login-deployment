@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+        name: account-service
+        labels:
+                app: account-service
+spec:
+        replicas: 1
+        selector:
+                matchLabels:
+                        app: account-service
+        template:
+                metadata:
+                        labels:
+                                app: account-service
+                spec:
+                        containers:
+                                - name: account-service
+                                  image: assadzahieer/account-service
+                                  ports:
+                                          - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+        name: session-token-service
+        labels:
+                app: session-token-service
+spec:
+        replicas: 1
+        selector:
+                matchLabels:
+                        app: session-token-service
+        template:
+                metadata:
+                        labels:
+                                app: session-token-service
+                spec:
+                        containers:
+                                - name: session-token-service
+                                  image: assadzahieer/session-token-service
+                                  ports:
+                                          - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+        name: email-service
+        labels:
+                app: email-service
+spec:
+        replicas: 1
+        selector:
+                matchLabels:
+                        app: email-service
+        template:
+                metadata:
+                        labels:
+                                app: email-service
+                spec:
+                        containers:
+                                - name: email-service
+                                  image: assadzahieer/email-service
+                                  ports:
+                                          - containerPort: 3000
+                                  env:
+                                          - name: GMAIL_USER
+                                            value: "ilovedocker123@gmail.com"
+                                          - name: GMAIL_PASS
+                                            value: "ilovedocker1!"
+                                          - name: SERVICE_NAME
+                                            value: "Example Project"
+                                          - name: ACTIVATION_LINK
+                                            value: "http://35.228.255.221/authentication/api/activate"

@@ -1,0 +1,105 @@
+version: '3.7'
+services:
+        mongo:
+                image: mongo:latest
+                container_name: mongo
+        mongo-service:
+                build: ./mongo-service/mongo-service
+                image: assadzahieer/mongo-service
+                container_name: mongo-service
+                depends_on:
+                        - mongo
+        secret-service:
+                build: ./secret-service/secret-service
+                image: assadzahieer/secret-service
+                container_name: secret-service
+                depends_on:
+                        - mongo-service
+        aes-encryption-service:
+                build: ./aes-encryption-service/aes-encryption-service
+                image: assadzahieer/aes-encryption-service
+                container_name: aes-encryption-service
+                depends_on:
+                        - mongo-service
+        email-service:
+                build: ./email-service/email-service
+                image: assadzahieer/email-service
+                container_name: email-service
+                depends_on:
+                        - aes-encryption-service
+                        - secret-service
+        session-token-service:
+                build: ./session-token-service/session-token-service
+                image: assadzahieer/session-token-service
+                container_name: session-token-service
+                depends_on:
+                        - aes-encryption-service
+                        - secret-service
+        account-service:
+                build: ./account-service/account-service
+                image: assadzahieer/account-service
+                container_name: account-service
+                depends_on:
+                        - aes-encryption-service
+                        - secret-service
+        dashboard-service:
+                build: ./dashboard-service/dashboard-service
+                image: assadzahieer/dashboard-service
+                container_name: dashboard-service
+                depends_on:
+                        - email-service
+                        - session-token-service
+                        - account-service
+        authentication-service:
+                build: ./authentication-service/authentication-service
+                image: assadzahieer/authentication-service
+                container_name: authentication-service
+                depends_on:
+                        - email-service
+                        - session-token-service
+                        - account-service
+        dashboard-client:
+                build: ./dashboard-client/dashboard-client
+                image: assadzahieer/dashboard-client
+                container_name: dashboard-client
+                depends_on:
+                         - email-service
+                         - session-token-service
+                         - account-service
+        authentication-client:
+                build: ./authentication-client/authentication-client
+                image: assadzahieer/authentication-client
+                container_name: authentication-client
+                depends_on:
+                         - email-service
+                         - session-token-service
+                         - account-service
+        gateway:
+                image: nginx:latest
+                container_name: gateway
+                ports:
+                        - target: 80
+                          published: 80
+                          protocol: tcp
+                volumes:
+                        - type: bind
+                          source: ./gateway/gateway/nginx.conf
+                          target: /etc/nginx/nginx.conf
+                depends_on:
+                        - dashboard-client
+                        - authentication-client
+                        - authentication-service
+                        - dashboard-service
+        role-service:
+                build: ./role-service/role-service
+                image: assadzahieer/role-service
+                container_name: role-service
+        group-service:
+                build: ./group-service/group-service
+                image: assadzahieer/group-service
+                container_name: group-service
+
+
+
+        
+

@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+        name: dashboard-client
+        labels:
+                app: dashboard-client
+spec:
+        replicas: 1
+        selector:
+                matchLabels:
+                        app: dashboard-client
+        template:
+                metadata:
+                        labels:
+                                app: dashboard-client
+                spec:
+                        containers:
+                                - name: dashboard-client
+                                  image: assadzahieer/dashboard-client
+                                  ports:
+                                          - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+        name: authentication-client
+        labels:
+                app: authentication-client
+spec:
+        replicas: 1
+        selector:
+                matchLabels:
+                        app: authentication-client
+        template:
+                metadata:
+                        labels:
+                                app: authentication-client
+                spec:
+                        containers:
+                                - name: authentication-client
+                                  image: assadzahieer/authentication-client
+                                  ports:
+                                          - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+        name: authentication-service
+        labels:
+                app: authentication-service
+spec:
+        replicas: 1
+        selector:
+                matchLabels:
+                        app: authentication-service
+        template:
+                metadata:
+                        labels:
+                                app: authentication-service
+                spec:
+                        containers:
+                                - name: authentication-service
+                                  image: assadzahieer/authentication-service
+                                  ports:
+                                          - containerPort: 3000
+                                  env:
+                                          - name: ACTIVATION_LINK
+                                            value: "http://35.228.255.221/authentication/api/activate"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+        name: dashboard-service
+        labels:
+                app: dashboard-service
+spec:
+        replicas: 1
+        selector:
+                matchLabels:
+                        app: dashboard-service
+        template:
+                metadata:
+                        labels:
+                                app: dashboard-service
+                spec:
+                        containers:
+                                - name: dashboard-service
+                                  image: assadzahieer/dashboard-service
+                                  ports:
+                                          - containerPort: 3000

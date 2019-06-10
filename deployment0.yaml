@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+        name: role-service
+        labels:
+                app: role-service
+spec:
+        replicas: 1
+        selector:
+                matchLabels:
+                        app: role-service
+        template:
+                metadata:
+                        labels:
+                                app: role-service
+                spec:
+                        containers:
+                                - name: role-service
+                                  image: assadzahieer/role-service
+                                  ports:
+                                          - containerPort: 3000
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+        name: group-service
+        labels:
+                app: group-service
+spec:
+        replicas: 1
+        selector:
+                matchLabels:
+                        app: group-service
+        template:
+                metadata:
+                        labels:
+                                app: group-service
+                spec:
+                        containers:
+                                - name: group-service
+                                  image: assadzahieer/group-service
+                                  ports:
+                                          - containerPort: 3000
