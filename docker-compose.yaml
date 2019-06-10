@@ -4,46 +4,46 @@ services:
                 image: mongo:latest
                 container_name: mongo
         mongo-service:
-                build: ./mongo-service/mongo-service
+                build: ./mongo-service
                 image: assadzahieer/mongo-service
                 container_name: mongo-service
                 depends_on:
                         - mongo
         secret-service:
-                build: ./secret-service/secret-service
+                build: ./secret-service
                 image: assadzahieer/secret-service
                 container_name: secret-service
                 depends_on:
                         - mongo-service
         aes-encryption-service:
-                build: ./aes-encryption-service/aes-encryption-service
+                build: ./aes-encryption-service
                 image: assadzahieer/aes-encryption-service
                 container_name: aes-encryption-service
                 depends_on:
                         - mongo-service
         email-service:
-                build: ./email-service/email-service
+                build: ./email-service
                 image: assadzahieer/email-service
                 container_name: email-service
                 depends_on:
                         - aes-encryption-service
                         - secret-service
         session-token-service:
-                build: ./session-token-service/session-token-service
+                build: ./session-token-service
                 image: assadzahieer/session-token-service
                 container_name: session-token-service
                 depends_on:
                         - aes-encryption-service
                         - secret-service
         account-service:
-                build: ./account-service/account-service
+                build: ./account-service
                 image: assadzahieer/account-service
                 container_name: account-service
                 depends_on:
                         - aes-encryption-service
                         - secret-service
         dashboard-service:
-                build: ./dashboard-service/dashboard-service
+                build: ./dashboard-service
                 image: assadzahieer/dashboard-service
                 container_name: dashboard-service
                 depends_on:
@@ -51,7 +51,7 @@ services:
                         - session-token-service
                         - account-service
         authentication-service:
-                build: ./authentication-service/authentication-service
+                build: ./authentication-service
                 image: assadzahieer/authentication-service
                 container_name: authentication-service
                 depends_on:
@@ -59,7 +59,7 @@ services:
                         - session-token-service
                         - account-service
         dashboard-client:
-                build: ./dashboard-client/dashboard-client
+                build: ./dashboard-client
                 image: assadzahieer/dashboard-client
                 container_name: dashboard-client
                 depends_on:
@@ -67,7 +67,7 @@ services:
                          - session-token-service
                          - account-service
         authentication-client:
-                build: ./authentication-client/authentication-client
+                build: ./authentication-client
                 image: assadzahieer/authentication-client
                 container_name: authentication-client
                 depends_on:
@@ -91,11 +91,11 @@ services:
                         - authentication-service
                         - dashboard-service
         role-service:
-                build: ./role-service/role-service
+                build: ./role-service
                 image: assadzahieer/role-service
                 container_name: role-service
         group-service:
-                build: ./group-service/group-service
+                build: ./group-service
                 image: assadzahieer/group-service
                 container_name: group-service
 
